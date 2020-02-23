@@ -26,6 +26,7 @@ my $total_hom_doloso = 0;
 my $total_hom_doloso_hombres = 0;
 my $total_hom_doloso_mujeres = 0;
 my $total_hom_doloso_nd = 0;
+my $total_feminicidio = 0;
 foreach my $h (@{$sensp_data}) {
 
     #ugly hack, fix this
@@ -38,6 +39,10 @@ foreach my $h (@{$sensp_data}) {
 	else {
 		$total_delitos_nd += get_line_total($h);
 	}
+
+    if($h->{'Tipo de delito'} eq "Feminicidio") {
+        $total_feminicidio += get_line_total($h); 
+    }
 
     if($h->{'Tipo de delito'} eq "Homicidio") {
         if($h->{'Subtipo de delito'} =~ /doloso/) {
@@ -60,7 +65,7 @@ foreach my $h (@{$sensp_data}) {
 }
 
 
-my $total_hom = $total_hom_culposo + $total_hom_doloso;
+my $total_hom = $total_hom_culposo + $total_hom_doloso + $total_feminicidio;
 my $percent_hom_doloso_hombres = $total_hom_doloso_hombres * 100 /  $total_hom_doloso;
 my $percent_hom_doloso_mujeres = $total_hom_doloso_mujeres * 100 /  $total_hom_doloso; 
 my $percent_hom_doloso_nd = $total_hom_doloso_nd * 100 /  $total_hom_doloso;
@@ -79,6 +84,8 @@ my $total_delitos = $total_delitos_mujeres + $total_delitos_hombres + $total_del
 my $percent_delitos_hombres = $total_delitos_hombres * 100 / $total_delitos;
 my $percent_delitos_mujeres = $total_delitos_mujeres * 100 / $total_delitos;
 my $percent_delitos_nd = $total_delitos_nd * 100 / $total_delitos;
+my $percent_feminicidio = $total_feminicidio * 100 / $total_delitos;
+my $percent_feminicidio_homicidios = $total_feminicidio * 100 / $total_hom;
 
 print "Total Delitos Mujeres 2019: $total_delitos_mujeres" .
 " ($percent_delitos_mujeres %)\n";
@@ -87,6 +94,10 @@ print "Total Delitos Hombres 2019: $total_delitos_hombres" .
 print "Total Delitos No identificado 2019: $total_delitos_nd" .
 " ($percent_delitos_nd %)\n";
 
+print "Total Feminicidios 2019: $total_feminicidio" .
+" ($percent_feminicidio %)\n";
+
+print "Los Feminicidios son el $percent_feminicidio_homicidios del total de homicidios\n";
 # Get the yearly total of the felony
 
 sub get_line_total {
